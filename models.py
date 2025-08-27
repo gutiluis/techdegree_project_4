@@ -23,5 +23,5 @@ class Product(Base):
     date_updated = Column("Last_update", Date)
 
     def __repr__(self):
-        return f"Name: {self.product_name}, Quantity: {self.product_quantity}, Price: {self.price}, Last_update: {self.date_updated}"
+        return f"Name: {self.product_name} Quantity: {self.product_quantity} Price: {self.product_price} Last_update: {self.date_updated}"
 
