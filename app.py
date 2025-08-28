@@ -49,8 +49,7 @@ def add_csv_to_db():
     with open("inventory.csv", newline="") as csvfile:
         iter_gener = csv.DictReader(csvfile, delimiter=",")  
         for row in iter_gener:
-            logging.debug("""a scalar value is a single value. 
-                          like an int, str, datetime. rather than a structured collection like list, rows or objects""")
+            logging.debug("""scalar value str() vs multiple values ORM""")
             no_dup_product_in_db = session.query(Product).filter(Product.product_name==row["product_name"]).one_or_none()
             if no_dup_product_in_db == None: # add product if no duplicate only
                 name = row["product_name"]
@@ -81,7 +80,11 @@ def app():
             pass
         elif user_interaction == "a":
             logging.info("Add a new product. ")
-            pass
+            product_name = input("Product name: ")
+            product_price = input("Product price: ")
+            product_quantity = input("Product quantity: ")
+            date_updated = input("Date updated: ")
+        
         elif user_interaction == "b":
             logging.info("Export csv to make a new db.")
             pass
