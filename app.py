@@ -47,14 +47,18 @@ logging.info("""function that will add the products
              \rlisted in the inventory.csv file to the db""")
 def add_csv_to_db():
     with open("inventory.csv", newline="") as csvfile:
-        iter_g = csv.DictReader(csvfile, delimiter=",")  
-        for row in iter_g:
-            name = row["product_name"]
-            price = clean_price(row["product_price"])
-            quantity = row["product_quantity"]
-            date = clean_date(row["date_updated"])
-            new_product = Product(product_name=name, product_price=price, product_quantity=quantity, date_updated=date)
-            session.add(new_product)
+        iter_gener = csv.DictReader(csvfile, delimiter=",")  
+        for row in iter_gener:
+            logging.debug("""a scalar value is a single value. 
+                          like an int, str, datetime. rather than a structured collection like list, rows or objects""")
+            no_dup_product_in_db = session.query(Product).filter(Product.product_name==row["product_name"]).one_or_none()
+            if no_dup_product_in_db == None: # add product if no duplicate only
+                name = row["product_name"]
+                price = clean_price(row["product_price"])
+                quantity = row["product_quantity"]
+                date = clean_date(row["date_updated"])
+                new_product = Product(product_name=name, product_price=price, product_quantity=quantity, date_updated=date)
+                session.add(new_product)
         session.commit()
         
         #    model_instance_class = Product(
