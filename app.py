@@ -27,10 +27,24 @@ def selections_menu():
         else:
             input("Wrong selection. Return to the main menu by pressing enter. Then enter only v, a, b or e: ")
 
-logging.info("cleaning csv date from csv file. The parameter in the function can be anything.")
+logging.info("csv format: 2/3/2000. The parameter in the function can be anything.")
 def clean_date(date_string_csv):
-    dt = datetime.strptime(date_string_csv, "%m/%d/%Y")
-    return dt.date()
+    logging.debug("module methods go inside the try block.")
+    try:
+        dt = datetime.strptime(date_string_csv, "%m/%d/%Y")
+        logging.debug("return dt.date() or return_date = dt.date()??")
+        return_date = dt.date()
+        logging.debug("handle the error")
+    except ValueError:
+        input("""
+              \n***** DATE ERROR *****
+              \rThe date format should include a valid month, day, year from the past.
+              \rEx: 01/12/2003
+              \rTry again by pressing enter.
+              \r**********************""")
+    else:
+        return_date
+    return
 
 logging.info("cleaning price column from csv. remove $ and make integer.")
 def clean_price(price_string_csv):
@@ -81,9 +95,13 @@ def app():
         elif user_interaction == "a":
             logging.info("Add a new product. ")
             product_name = input("Product name: ")
-            product_price = input("Product price: ")
+            product_price = input("Product price (Ex: 25.64): ")
+            price_clean = clean_price(product_price)
             product_quantity = input("Product quantity: ")
-            date_updated = input("Date updated: ")
+            logging.debug("2 different valueerrors. day is out of range for month. and format February 20, 2002 does not match '%m/%d/%Y' ")
+            date_updated = input("Date updated (Ex: 11/1/2018): ")
+            date_clean = clean_date(date_updated)
+            
         
         elif user_interaction == "b":
             logging.info("Export csv to make a new db.")
@@ -98,8 +116,8 @@ def app():
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
 #    add_inventory_to_db()
-    #app()
-    add_csv_to_db()
+    app()
+    #add_csv_to_db()
  
-    for product in session.query(Product):
-        print(product)
+    #for product in session.query(Product):
+     #   print(product)
