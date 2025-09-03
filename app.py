@@ -103,9 +103,9 @@ def app():
         user_interaction = selections_menu()
 
         if user_interaction == "v":
-            # TODO: Add logic to view product by id
+            logging.debug("getting and displaying a product. by id.")
             for product in session.query(Product):
-                print(f"{product.product_id}")
+                print(f"{product.product_id} | {product.product_name}")
             input("\nPress enter and return to main menu...")
 
         elif user_interaction == "a":
@@ -127,7 +127,6 @@ def app():
             print(f"\nProduct '{product_name}' added successfully!\n")
 
         elif user_interaction == "b":
-            # TODO: Add logic to backup database / export CSV
             make_csv_backup_from_sqlite("inventory.db", "backup_csv.csv")
             logging.info("CSV db backup created...")
 
