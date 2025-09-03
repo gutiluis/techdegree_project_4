@@ -1,6 +1,8 @@
 import logging
 import sqlite3
 
+# script to make a sqlite3 db from another
+
 logging.basicConfig(level=logging.INFO)
 
 

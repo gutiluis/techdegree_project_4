@@ -1,7 +1,7 @@
 #!/bin/python
 from models import (Base, session,
                     Product, engine)
-from sqlite_backup_API import *
+from sqlite_CSV_backup import *
 from datetime import datetime
 import csv
 import logging
@@ -84,9 +84,14 @@ def add_csv_to_db():
             if no_dup_product_in_db == None: # add product if no duplicate only
                 name = row["product_name"]
                 price = clean_price(row["product_price"])
-                quantity = row["product_quantity"]
+                quantity = clean_quantity(row["product_quantity"])
                 date = clean_date(row["date_updated"])
-                new_product = Product(product_name=name, product_price=price, product_quantity=quantity, date_updated=date)
+                new_product = Product(
+                    product_name=name, 
+                    product_price=price, 
+                    product_quantity=quantity, 
+                    date_updated=date
+                )
                 session.add(new_product)
         session.commit()
 
@@ -99,7 +104,9 @@ def app():
 
         if user_interaction == "v":
             # TODO: Add logic to view product by id
-            pass
+            for product in session.query(Product):
+                print(f"{product.product_id}")
+            input("\nPress enter and return to main menu...")
 
         elif user_interaction == "a":
             product_name = input("Product name: ").strip()
@@ -121,15 +128,15 @@ def app():
 
         elif user_interaction == "b":
             # TODO: Add logic to backup database / export CSV
-            make_backup()
+            make_csv_backup_from_sqlite("inventory.db", "backup_csv.csv")
+            logging.info("CSV db backup created...")
 
         else:  # user_interaction == "e"
             print("\nGOODBYE")
             app_running = False
 
 
-
-
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
+    add_csv_to_db()
     app()
