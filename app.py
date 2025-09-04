@@ -128,12 +128,6 @@ def app():
         user_interaction = selections_menu()
 
         if user_interaction == "v":
-            """
-            logging.debug("getting and displaying a product. by id.")
-            for product in session.query(Product):
-                print(f"{product.product_id} | {product.product_name}")
-            input("\nPress enter and return to main menu...")
-            """
             logging.debug("grab length of db and use as a range?")
             id_options = []
             for product in session.query(Product):
@@ -179,7 +173,7 @@ def app():
             make_csv_backup_from_sqlite("inventory.db", "backup_csv.csv")
             logging.info("CSV db backup created...")
 
-        else:  # user_interaction == "e"
+        else:
             print("\nGOODBYE")
             app_running = False
 

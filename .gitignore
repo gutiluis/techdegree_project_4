@@ -1,7 +1,6 @@
 __pycache__/
-env
+env/
 .vscode
 inventory.db
 backup_csv.csv
 sqlite_backup_API.py
-README.md
