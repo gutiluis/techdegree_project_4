@@ -5,7 +5,6 @@ from sqlite_CSV_backup import *
 from datetime import datetime
 import csv
 import logging
-import sys
 import time
 
 logging.basicConfig(level=logging.INFO)
