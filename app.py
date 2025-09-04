@@ -31,7 +31,7 @@ def selections_menu():
 logging.debug("app function has a clean_id wrapper/helper function")
 def clean_id(id_string, options):
     try:
-        product_id = int(id_string)
+        id = int(id_string)
     except ValueError:
         input("""
               \n****** ID ERROR ******
@@ -42,8 +42,8 @@ def clean_id(id_string, options):
         logging.debug("the return will return None... affecting the while loop")
         return
     else:
-        if product_id in options:
-            return product_id
+        if id in options:
+            return id
         else:
             input(f"""
               \n****** ID ERROR ******
@@ -131,7 +131,7 @@ def app():
             logging.debug("grab length of db and use as a range?")
             id_options = []
             for product in session.query(Product):
-                id_options.append(product.product_id)
+                id_options.append(product.id)
             id_error = True
             while id_error:
                 id_choice = input(f"""
@@ -141,7 +141,7 @@ def app():
                 id_choice = clean_id(id_choice, id_options)
                 if type(id_choice) == int:
                     id_error = False
-            the_product = session.query(Product).filter(Product.product_id==id_choice).first()
+            the_product = session.query(Product).filter(Product.id==id_choice).first()
             logging.debug("""product price get back to an actual price and not the price and cents
                           ex: 10.99 instead of 1,099""")
             print(f"""
