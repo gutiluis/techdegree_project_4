@@ -28,6 +28,31 @@ def selections_menu():
         else:
             input("Wrong selection. Return to the main menu by pressing enter. Then enter only v, a, b or e: ")
 
+logging.debug("app function has a clean_id wrapper/helper function")
+def clean_id(id_string, options):
+    try:
+        product_id = int(id_string)
+    except ValueError:
+        input("""
+              \n****** ID ERROR ******
+              \rThe id should be a number without a symbol...
+              \rEx: 1, 2, 3...
+              \rPress Enter to return to the last menu... 
+              \r**********************""")
+        logging.debug("the return will return None... affecting the while loop")
+        return
+    else:
+        if product_id in options:
+            return product_id
+        else:
+            input(f"""
+              \n****** ID ERROR ******
+              \rOptions: {options}"
+              \rPress Enter to return to the last menu... 
+              \r**********************""")
+            return
+
+
 logging.info("cleaning price column string data type from csv. remove $ and make integer.")
 def clean_price(price_string_csv):
     while True:
@@ -103,11 +128,34 @@ def app():
         user_interaction = selections_menu()
 
         if user_interaction == "v":
+            """
             logging.debug("getting and displaying a product. by id.")
             for product in session.query(Product):
                 print(f"{product.product_id} | {product.product_name}")
             input("\nPress enter and return to main menu...")
-
+            """
+            logging.debug("grab length of db and use as a range?")
+            id_options = []
+            for product in session.query(Product):
+                id_options.append(product.product_id)
+            id_error = True
+            while id_error:
+                id_choice = input(f"""
+                      \nId Options: {id_options}...
+                      \rProduct id: """)
+                logging.debug("clean_id() has 2 parameters too")
+                id_choice = clean_id(id_choice, id_options)
+                if type(id_choice) == int:
+                    id_error = False
+            the_product = session.query(Product).filter(Product.product_id==id_choice).first()
+            logging.debug("""product price get back to an actual price and not the price and cents
+                          ex: 10.99 instead of 1,099""")
+            print(f"""
+                  \nProduct name: {the_product.product_name}
+                  \rProduct current price: ${the_product.product_price / 100}
+                  \rProduct quantity - (YYYY-MM-DD): {the_product.date_updated}""")
+            input("\nPress enter to return to the main menu()...")
+            
         elif user_interaction == "a":
             product_name = input("Product name: ").strip()
 
@@ -125,7 +173,8 @@ def app():
             session.add(new_product)
             session.commit()
             print(f"\nProduct '{product_name}' added successfully!\n")
-
+            time.sleep(1)
+            
         elif user_interaction == "b":
             make_csv_backup_from_sqlite("inventory.db", "backup_csv.csv")
             logging.info("CSV db backup created...")
