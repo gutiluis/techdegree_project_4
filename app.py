@@ -59,6 +59,7 @@ def clean_price(price_string_csv):
             replace_m = price_string_csv.replace("$", "").strip()
             price_float = float(replace_m)
             return int(price_float * 100)
+            logging.debug("runs when a user does not enter something")
         except ValueError:
             price_string_csv = input("""
               \n***** PRICE ERROR *****
@@ -146,12 +147,20 @@ def app():
             print(f"""
                   \nProduct name: {the_product.product_name}
                   \rProduct current price: ${the_product.product_price / 100}
-                  \rProduct quantity - (YYYY-MM-DD): {the_product.date_updated}""")
+                  \rProduct quantity: {the_product.product_quantity}
+                  \rLast date updated: (YYYY-MM-DD): {the_product.date_updated}""")
             input("\nPress enter to return to the main menu()...")
             
         elif user_interaction == "a":
-            product_name = input("Product name: ").strip()
-
+            logging.debug("clean_name wrapper function still undone")
+            while True:
+                product_name = input("Product name: ").strip()
+                logging.debug("""will evaluate to false if left empty...
+                              how to raise an exception instead of looping to handle it elsewhere """)
+                if product_name:
+                    break
+                print("Enter a value...")
+                
             product_price = clean_price(input("Product price (Ex: 25.64): "))
             product_quantity = clean_quantity(input("Product quantity: "))
             date_updated = clean_date(input("Date updated (Ex: 11/1/2018): "))
